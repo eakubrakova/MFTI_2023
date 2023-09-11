@@ -1,0 +1,25 @@
+# Объявляем функцию find_min_max, которая выбирает из последовательности минимальное и максимальное число.
+
+def find_min_max(input_string):
+
+  # создаем пустой список, куда будут складываться введенные данные.
+    numbers = []
+    # проходим в цикле по введенной строке, предварительно разбитой на элементы при помощи метода .split,
+    # проверяем правильность данных, которые должны быть типа float, корректные данные добавляем в созданный пустой список.
+    for word in input_string.split():
+        try:
+            number = float(word.replace(',', '.'))
+            numbers.append(number)
+        except ValueError:
+            pass
+    # при помощи встроенных функций min и max определяем минимальное и максимальное значение в списке и возвращаем их в функцию.
+
+    minimum = min(numbers)
+    maximum = max(numbers)
+
+    return minimum, maximum
+
+input_string = input('Введите последовательность чисел: ')
+minimum, maximum = find_min_max(input_string)
+print('Minimum:', minimum)
+print('Maximum:', maximum)
