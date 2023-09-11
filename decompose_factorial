@@ -1,0 +1,43 @@
+# Создаем функцию decompose_factorial и пустой список для множителей.
+def decompose_factorial(n):
+    factors = []
+
+    # Считаем факториал от числа n
+    factorial = 1
+    for i in range(1, n+1):
+        factorial *= i
+
+    # Производим декомпозицию факториала на простые множители
+    divisor = 2
+    while factorial > 1:
+        if factorial % divisor == 0:
+            count = 0
+            while factorial % divisor == 0:
+                count += 1
+                factorial //= divisor
+            factors.append((divisor, count))
+        divisor += 1
+
+    # Записываем результат в строку, дополняя необходимыми математическими знаками.
+
+    result = str(n) + "! = "
+    for factor, count in factors:
+        if count == 1:
+            result += str(factor) + " * "
+        else:
+            result += str(factor) + "^" + str(count) + " * "
+
+    # Удаляем  " * "
+
+    result = result[:-3]
+
+    return result
+
+# Вводим число с клавиатуры
+
+n = int(input("Введите число: "))
+
+# Вызываем функцию и выводим результат ее работы на экран
+
+result = decompose_factorial(n)
+print(result)
