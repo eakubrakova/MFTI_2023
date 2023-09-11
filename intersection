@@ -1,0 +1,29 @@
+# Объявляем функцию pure_intersection, которая находит пересечение двух списков.
+
+def pure_intersection(list1, list2):
+  # Вводим проверку на правильность ввода данных, проходим итератором по 2 спискам,
+  # в случе ошибочного ввода, сообщаем об этом пользователю.
+
+    try:
+        list1 = [int(x) for x in list1]
+        list2 = [int(x) for x in list2]
+    except ValueError:
+        print("Некорректный ввод.")
+        return
+
+    intersection = list(set(list1) & set(list2))
+    return intersection
+
+# Принимаем данные от пользователя.
+input1 = input("Введите последовательность чисел для клиента 'A': ")
+input2 = input("Введите последовательность чисел для клиента 'B': ")
+
+# При помощи метода .split представляем данные в удобном формате, через запятую.
+
+list1 = input1.split(", ")
+list2 = input2.split(", ")
+
+# Вызываем функцию pure_intersection и выводим полученный результат на экран.
+
+result = pure_intersection(list1, list2)
+print(result)
