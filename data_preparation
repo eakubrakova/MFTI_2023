@@ -1,0 +1,34 @@
+trash_symbols = '" \n'
+
+def extract_name(filename: str) -> str:
+    dot_position = filename.rfind('.')
+    slash_position = filename.rfind('/')
+
+    return filename[(slash_position + 1):dot_position]
+
+def sql_from_file(
+    filename: str,
+    sep=',',
+    tablename=None,
+    varnames=None,
+    dtypes=None
+) -> str:
+    # parse file
+    with open(filename, 'r') as file:  # file = open('./StudentsPerformance.csv', 'r')
+        lines = []
+        
+        for line in file:
+            line_clean = [elem.strip(trash_symbols) for elem in line.split(',')]
+            
+            lines.append(line_clean)
+
+    # get filename
+    if tablename is None:
+        tablename = extract_name(filename)
+
+    # get varnames
+    if varnames is None:
+        varnames = lines[0].copy()  # list(lines[0]), чтобы не создавать ссылку на первый список в lines
+
+    # reshape lines
+    lines_reshaped = list(zip(*lines))
