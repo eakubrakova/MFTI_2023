@@ -1,0 +1,16 @@
+n = 815
+n_ = abs(n)
+
+result = ''
+
+while n_ > 0:
+    num = n_ % 10
+    result += int1_to_str(num)  # result = result + int1_to_str(num)
+    n_ //= 10
+
+result = result[::-1]  # result = '-' * (n < 0) + result[::-1]
+
+if n < 0:
+    result = '-' + result
+
+print(result)
