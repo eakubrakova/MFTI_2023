@@ -1,0 +1,19 @@
+def int1_to_str(number: int) -> str:
+    return chr(48 + number) #использование ASCII
+
+def int_to_str(number: int) -> str:
+    a_ = abs(number)
+    
+    result = ''
+    
+    while a_ > 0:
+        num = a_ % 10
+        result += int1_to_str(num)
+        a_ //= 10  # a_ = a_ // 10
+
+    result = result[::-1]  # result = '-' * (number < 0) + result[::-1]
+
+    if number < 0:
+        result = '-' + result
+
+    return result
