@@ -1,19 +1,81 @@
+import re
+
+template = 'CREATE TABLE "{tablename}" (\n{ddl});'
+trash_symbols = '" \n'
+re_int = re.compile('-{0,1}\d+')
+re_float = re.compile('-?\d+\.\d*')
+
+def check_bool(value: str) -> bool:
+    return value.lower() in {'true', 'false'}
+
+def check_float(value: str) -> bool:
+    return re_float.fullmatch(value) is not None
+
+def check_int(value: str) -> bool:
+    return re_int.fullmatch(value) is not None
+
+def check_dtype_(vector, fun) -> bool:
+    # all or nothing
+    return all(fun(elem) for elem in vector)
+
+def guess_dtype(vector) -> str:
+    if check_dtype_(vector, check_bool):
+        return 'bool'
+    elif check_dtype_(vector, check_int):
+        return 'int'
+    elif check_dtype_(vector, check_float):
+        return 'float'
+    else:
+        return 'text'
+
 def extract_name(filename: str) -> str:
     dot_position = filename.rfind('.')
     slash_position = filename.rfind('/')
 
     return filename[(slash_position + 1):dot_position]
 
+def create_sql(tname, varnames, dtypes) -> str:
+    ddl = ''.join([f'    "{name}" {dtype},\n' for name, dtype in zip(varnames, dtypes)])
+
+    return template.format(tablename=tname, ddl=ddl)
+
 def sql_from_file(
     filename: str,
     sep=',',
     tablename=None,
     varnames=None,
-    dtypes=None
+    dtypes=None,
+    file_out='sql_script.sql'
 ) -> str:
-    with open(filename, 'r') as file:  # file = open('./StudentsPerformance.csv', 'r') 
-        text = file.read()
+    # parse file
+    with open(filename, 'r') as file:  # file = open('./StudentsPerformance.csv', 'r')
+        lines = []
+        
+        for line in file:
+            line_clean = [elem.strip(trash_symbols) for elem in line.split(sep)]
+            
+            lines.append(line_clean)
 
     # get filename
     if tablename is None:
         tablename = extract_name(filename)
+
+    # get varnames
+    if varnames is None:
+        varnames = lines[0].copy()  # list(lines[0]), чтобы не создавать ссылку на первый список в lines
+
+    # reshape lines
+    lines_reshaped = list(zip(*lines[1:]))
+
+    # guess dtypes
+    if dtypes is None:
+        dtypes = [guess_dtype(col) for col in lines_reshaped]  # get pairs (varname, dtype)
+
+    # get sql
+    sql = create_sql(tablename, varnames, dtypes)
+
+    # write file
+    with open(file_out, 'w') as file:
+        file.write(sql)
+
+    return file_out
