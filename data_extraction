@@ -1,0 +1,19 @@
+def extract_name(filename: str) -> str:
+    dot_position = filename.rfind('.')
+    slash_position = filename.rfind('/')
+
+    return filename[(slash_position + 1):dot_position]
+
+def sql_from_file(
+    filename: str,
+    sep=',',
+    tablename=None,
+    varnames=None,
+    dtypes=None
+) -> str:
+    with open(filename, 'r') as file:  # file = open('./StudentsPerformance.csv', 'r') 
+        text = file.read()
+
+    # get filename
+    if tablename is None:
+        tablename = extract_name(filename)
