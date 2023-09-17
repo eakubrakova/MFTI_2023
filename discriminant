@@ -1,0 +1,24 @@
+def solve(a: float, b: float, c: float) -> tuple[float]:
+    """
+    a: float - first coefficient
+    """
+
+    # check arguments
+    for arg in (a, b, c):
+        argtype = type(arg)
+
+        if argtype != float:
+            raise ValueError(f'Wrong type {argtype}!')
+    
+    D = b ** 2 - 4 * a * c
+
+    if D < 0:
+        result = ((...),) # создаем кортеж
+        result = ()  # tuple()
+    elif D == 0:
+        result = ((-1) * b / (2 * a),)
+    else:
+        sqrtD = D ** (1 / 2)
+        result = (((-1) * b + sqrtD) / (2 * a), ((-1) * b - sqrtD) / (2 * a))
+
+    return result
