@@ -1,2 +1,2 @@
 # MIPT_2023
-Homework for Python course and lecture materials
+Homeworks and lecture materials for Python course at DS Master's 2023.
