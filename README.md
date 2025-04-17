@@ -1,2 +1,2 @@
-# MFTI_2023
-Homework for Python course
+# MIPT_2023
+Homework for Python course and lecture materials
